@@ -1,4 +1,5 @@
 import os
+import codecs
 from process_video import process_video
 from upload_to_gcloud import upload_to_gcloud
 from format_response import format_transcript
@@ -10,7 +11,7 @@ def transcribe_gcs(mp4_file):
     audio_file_path = process_video(mp4_file) #Create audio file
 
     if audio_file_path:
-        bucket_name = 'test-dictation' # Your gcloud bucket name
+        bucket_name = 'bucket_name' # Your gcloud bucket name
         print(mp4_file)
         audio_file_name = os.path.basename(audio_file_path) + '.ogg'
         print(audio_file_name)
@@ -24,7 +25,7 @@ def transcribe_gcs(mp4_file):
             uri="gs://" + bucket_name + "/" + audio_file_name)
         config = types.RecognitionConfig(
             encoding=enums.RecognitionConfig.AudioEncoding.OGG_OPUS,
-            language_code='en-US',
+            language_code='ja-JP',
             sample_rate_hertz=16000,
             enable_word_time_offsets=True
         )
@@ -38,7 +39,7 @@ def transcribe_gcs(mp4_file):
 
         results = result.results
 
-        raw_text_file = open( audio_file_path + '.txt', 'w')
+        raw_text_file = codecs.open( audio_file_path + '.txt', 'w','utf-8')
         for result in results:
             for alternative in result.alternatives:
                 raw_text_file.write(alternative.transcript + '\n')

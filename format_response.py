@@ -1,4 +1,5 @@
 import math
+import codecs
 
 #Convert the raw transcription into proper .srt format
 def format_transcript(results, audio_file):
@@ -17,7 +18,7 @@ def format_transcript(results, audio_file):
             yield l[i:i + n]
 
 
-    file = open( audio_file + ".srt", "w")
+    file = codecs.open( audio_file + ".srt", 'w','utf-8')
     counter = 0 # Used for numbering lines in file
 
     for result in results:
@@ -52,7 +53,7 @@ def format_transcript(results, audio_file):
 
                     section = ''
                     for word_info in words:
-                        section += word_info.word + " "
+                        section += word_info.word.split('|')[0]+ ""
 
                     counter += 1
                     file.write(str(counter) + '\n')
